@@ -9,7 +9,7 @@ import frc.io.github.anishthewizard.electronics.encoders.ThreadedEncoder;
 import java.util.Arrays;
 
 public class Swerve {
-    private SwerveModule[] modules;
+    private final SwerveModule[] modules;
 
     private Pigeon2IMU gyro;
 
@@ -17,10 +17,10 @@ public class Swerve {
     private double maxModuleSpeed;
 
     private double[] speeds;
-    private double[] thetas;
+    private final double[] thetas;
 
-    private PIDController translationalPIDController;
-    private PIDController rotationalPIDController;
+    private final PIDController translationalPIDController;
+    private final PIDController rotationalPIDController;
 
     public Swerve(
             LazyMotorController<?>[] drives,

@@ -5,14 +5,14 @@ import frc.io.github.anishthewizard.electronics.motors.LazyMotorController;
 import frc.io.github.anishthewizard.electronics.encoders.ThreadedEncoder;
 
 public class SwerveModule {
-    private LazyMotorController<?> drive;
-    private LazyMotorController<?> steer;
+    private final LazyMotorController<?> drive;
+    private final LazyMotorController<?> steer;
 
-    private ThreadedEncoder<?> steercoder;
+    private final ThreadedEncoder<?> steercoder;
 
-    private double kVelocity;
-    private PIDController driveController;
-    private PIDController steerController;
+    private final double kVelocity;
+    private final PIDController driveController;
+    private final PIDController steerController;
 
     private double x, y;
     private double lastDrivePosition;
