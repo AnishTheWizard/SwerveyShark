@@ -22,9 +22,9 @@ public class SwerveConfiguration {
 
     public double[] steerPIDGains = null;
 
-    public double MAX_MODULE_SPEED = Double.parseDouble(null);
+    public double MAX_MODULE_SPEED = -1;
 
-    public int numberOfModules = Integer.parseInt(null);
+    public int numberOfModules = 0;
 
     public boolean isConfigReady() {
         boolean condition = drives == null ||
@@ -36,8 +36,8 @@ public class SwerveConfiguration {
                 rotationalPIDGains == null ||
                 drivePIDFGains == null ||
                 steerPIDGains == null ||
-                MAX_MODULE_SPEED == Double.parseDouble(null) ||
-                numberOfModules == Integer.parseInt(null);
+                MAX_MODULE_SPEED == -1 ||
+                numberOfModules == 0;
 
         return !condition;
     }
