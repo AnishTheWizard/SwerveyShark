@@ -5,6 +5,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -91,8 +92,12 @@ public class Robot extends TimedRobot
     
     
     /** This method is called periodically during operator control. */
+    public final Joystick driver = new Joystick(0);
+
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        Drivetrain.getInstance().control(driver.getX(), driver.getY(), driver.getRawAxis(4));
+    }
     
     
     /** This method is called once when the robot is disabled. */

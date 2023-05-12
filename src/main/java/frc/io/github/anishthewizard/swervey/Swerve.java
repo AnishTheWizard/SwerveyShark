@@ -63,9 +63,28 @@ public class Swerve {
         }
     }
 
+    public static Swerve fromConfiguration(SwerveConfiguration conf) {
+        if(!conf.isConfigReady())
+            throw new RuntimeException("Configuration is incomplete! Make sure all parameters are filled");
+        return new Swerve(
+                conf.drives,
+                conf.steers,
+                conf.encoders,
+                conf.gyro,
+                conf.modulePositions,
+                conf.translationalPIDGains,
+                conf.rotationalPIDGains,
+                conf.drivePIDFGains,
+                conf.steerPIDGains,
+                conf.MAX_MODULE_SPEED,
+                conf.numberOfModules
+        );
+    }
+
     public void control(double x, double y, double rotate) {
         double chassisHeading = gyro.getYaw();
 
+        //TODO THIS DOESN"T WORK WITH RADIANS/SECONDS ENTIRELY
 
         for(int i = 0; i < modules.length; i++) {
             double[] rotationVector = new double[] {
