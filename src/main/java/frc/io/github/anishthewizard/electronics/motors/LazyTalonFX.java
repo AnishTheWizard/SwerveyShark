@@ -12,11 +12,11 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
 
     private double ticksPerMeter;
 
-    public LazyTalonFX(TalonFX motor) {
+    public LazyTalonFX(TalonFX motor, double ticksPerMeter) {
         this.motor = motor;
     }
 
-    public LazyTalonFX(int port) {
+    public LazyTalonFX(int port, double ticksPerMeter) {
         this.motor = new TalonFX(port);
     }
 

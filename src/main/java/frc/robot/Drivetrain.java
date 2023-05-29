@@ -2,6 +2,7 @@ package frc.robot;
 
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.io.github.anishthewizard.electronics.IMU.Pigeon2IMU;
 import frc.io.github.anishthewizard.electronics.encoders.ThreadedCANcoder;
@@ -39,9 +40,17 @@ public class Drivetrain extends SubsystemBase {
                 new double[]{0.5794/2, -0.5794/2}
         };
 
+        double ticksPerMeter = 0;
+
+        TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+
         for(int i = 0; i < 4; i++) {
-            drives[i] = new LazyTalonFX(new TalonFX(i));
-            steers[i] = new LazyTalonFX(new TalonFX(i+4));
+            TalonFX drive = new TalonFX(i);
+            drive.config_kF(0, 1/(4.94*ticksPerMeter));
+            drive.config_kP(0, 0.05);
+
+            drives[i] = new LazyTalonFX(drive, ticksPerMeter);
+            steers[i] = new LazyTalonFX(new TalonFX(i+4), ticksPerMeter);
 
             encoders[i] = new ThreadedCANcoder(i, Math.PI, 0, 20);
         }
@@ -60,6 +69,7 @@ public class Drivetrain extends SubsystemBase {
         config.drivePIDFGains = new double[]{0.01, 0.0, 0.0, 1.0/4.96824};
         config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
         config.MAX_MODULE_SPEED = 4.96824;
+        config.radius = Math.hypot(0.5794/2, 0.5794/2);
         config.numberOfModules = 4;
 
         swerve = Swerve.fromConfiguration(config);
