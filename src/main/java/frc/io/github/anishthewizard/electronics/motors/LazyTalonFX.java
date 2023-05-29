@@ -37,6 +37,12 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
     }
 
     @Override
+    public void setVelocityInMeters(double speed) {
+        speed *= ticksPerMeter;
+        motor.set(ControlMode.Velocity, speed);
+    }
+
+    @Override
     public double getPosition() {
         return motor.getSelectedSensorPosition()/ticksPerMeter;
     }

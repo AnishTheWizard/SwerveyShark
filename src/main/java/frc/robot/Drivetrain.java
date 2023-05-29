@@ -66,7 +66,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void control(double x, double y, double rotate) {
-        swerve.control(x/4.96824, y/4.96824, rotate/11.90873286292469);
+        swerve.controlWithPercent(x, y, rotate);
     }
 }
 

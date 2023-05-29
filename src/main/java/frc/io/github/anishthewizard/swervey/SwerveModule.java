@@ -46,12 +46,11 @@ public class SwerveModule {
         double error = errorAndVelocityMultiplier[0];
         double velocityMultiplier = errorAndVelocityMultiplier[1];
 
-        double motorInput = kVelocity * velocity + driveController.calculate(drive.getVelocity(), velocity);
-        motorInput *= velocityMultiplier;
+        velocity *= velocityMultiplier;
 
         double steerSpeed = steerController.calculate(error);
 
-        drive.set(velocity);
+        drive.setVelocityInMeters(velocity);
         steer.set(steerSpeed);
     }
 

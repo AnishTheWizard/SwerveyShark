@@ -6,6 +6,8 @@ public interface LazyMotorController<T> {
 
     void set(double speed);
 
+    void setVelocityInMeters(double speed);
+
     double getPosition();
 
     double getVelocity();

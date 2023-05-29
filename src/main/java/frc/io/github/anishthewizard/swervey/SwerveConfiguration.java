@@ -24,6 +24,8 @@ public class SwerveConfiguration {
 
     public double MAX_MODULE_SPEED = -1;
 
+    public double radius = -1;
+
     public int numberOfModules = 0;
 
     public boolean isConfigReady() {
@@ -37,6 +39,7 @@ public class SwerveConfiguration {
                 drivePIDFGains == null ||
                 steerPIDGains == null ||
                 MAX_MODULE_SPEED == -1 ||
+                radius == -1 ||
                 numberOfModules == 0;
 
         return !condition;

@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class Swerve {
     private final SwerveModule[] modules;
 
+
     private Pigeon2IMU gyro;
 
     private final double[] rotationAngles;
@@ -21,6 +22,8 @@ public class Swerve {
 
     private final PIDController translationalPIDController;
     private final PIDController rotationalPIDController;
+
+    private final double radius;
 
     public Swerve(
             LazyMotorController<?>[] drives,
@@ -33,6 +36,7 @@ public class Swerve {
             double[] drivePIDFGains,
             double[] steerPIDGains,
             double MAX_MODULE_SPEED,
+            double radius,
             int numberOfModules) {
 
         modules = new SwerveModule[numberOfModules];
@@ -46,6 +50,8 @@ public class Swerve {
 
         translationalPIDController = new PIDController(translationalPIDGains);
         rotationalPIDController = new PIDController(rotationalPIDGains);
+
+        this.radius = radius;
 
         for(int i = 0; i < numberOfModules; i++) {
             modules[i] = new SwerveModule(
@@ -77,14 +83,19 @@ public class Swerve {
                 conf.drivePIDFGains,
                 conf.steerPIDGains,
                 conf.MAX_MODULE_SPEED,
+                conf.radius,
                 conf.numberOfModules
         );
     }
 
-    public void control(double x, double y, double rotate) {
-        double chassisHeading = gyro.getYaw();
+    //this is the controller inputed
+    public void controlWithPercent(double x, double y, double rotate) {
+        control(x * maxModuleSpeed, y*maxModuleSpeed, rotate*maxModuleSpeed);
+    }
 
-        //TODO THIS DOESN"T WORK WITH RADIANS/SECONDS ENTIRELY
+    //assume all vectors given are m/s
+    private void control(double x, double y, double rotate) {
+        double chassisHeading = gyro.getYaw();
 
         for(int i = 0; i < modules.length; i++) {
             double[] rotationVector = new double[] {
@@ -123,7 +134,7 @@ public class Swerve {
 
         double adjustedAngularVel = angularVelocity + rotationalPIDController.calculate(currentSwerveState[2], position[2]);
 
-        control(adjustedXLinearVel, adjustedYLinearVel, adjustedAngularVel);
+        control(adjustedXLinearVel, adjustedYLinearVel, adjustedAngularVel * radius);
     }
 
     public double[] getSwerveState() {
