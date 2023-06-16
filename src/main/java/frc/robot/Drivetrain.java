@@ -1,14 +1,18 @@
 package frc.robot;
 
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.io.github.anishthewizard.electronics.IMU.Pigeon2IMU;
 import frc.io.github.anishthewizard.electronics.encoders.ThreadedCANcoder;
 import frc.io.github.anishthewizard.electronics.motors.LazyTalonFX;
 import frc.io.github.anishthewizard.swervey.Swerve;
 import frc.io.github.anishthewizard.swervey.SwerveConfiguration;
+import frc.io.github.anishthewizard.swervey.SwerveModule;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -26,6 +30,8 @@ public class Drivetrain extends SubsystemBase {
      */
 
     Swerve swerve;
+    SwerveModule mod;
+    LazyTalonFX saved;
     private Drivetrain() {
 
         LazyTalonFX[] drives = new LazyTalonFX[4];
@@ -40,22 +46,27 @@ public class Drivetrain extends SubsystemBase {
                 new double[]{0.5794/2, -0.5794/2}
         };
 
-        double ticksPerMeter = 0;
+        double ticksPerMeter = 4350.8*2;
+        // double ticksPerMeter = 437.06;
 
-        TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+        double maxSpeed = 5;
 
+        // TalonFXConfiguration driveConfig = new TalonFXConfiguration();
+        
         for(int i = 0; i < 4; i++) {
             TalonFX drive = new TalonFX(i);
-            drive.config_kF(0, 1/(4.94*ticksPerMeter));
+            drive.setNeutralMode(NeutralMode.Coast);
+            drive.config_kF(0, 1./(maxSpeed*ticksPerMeter));
             drive.config_kP(0, 0.05);
 
             drives[i] = new LazyTalonFX(drive, ticksPerMeter);
             steers[i] = new LazyTalonFX(new TalonFX(i+4), ticksPerMeter);
 
-            encoders[i] = new ThreadedCANcoder(i, Math.PI, 0, 20);
+            encoders[i] = new ThreadedCANcoder(i, Math.PI, 0, 10, "CAN Bus 2");
         }
+        saved = drives[0];
 
-        Pigeon2IMU gyro = new Pigeon2IMU(0);
+        Pigeon2IMU gyro = new Pigeon2IMU(0, "CAN Bus 2");
 
         SwerveConfiguration config = new SwerveConfiguration();
 
@@ -68,15 +79,22 @@ public class Drivetrain extends SubsystemBase {
         config.rotationalPIDGains = new double[]{0.65, 0.0, 0.0};
         config.drivePIDFGains = new double[]{0.01, 0.0, 0.0, 1.0/4.96824};
         config.steerPIDGains = new double[]{0.62, 0.0, 0.0};
-        config.MAX_MODULE_SPEED = 4.96824;
+        config.MAX_MODULE_SPEED = maxSpeed;
         config.radius = Math.hypot(0.5794/2, 0.5794/2);
-        config.numberOfModules = 4;
+        config.numberOfModules = 1;
 
         swerve = Swerve.fromConfiguration(config);
+
+        // mod = new SwerveModule(drives[0],
+        // steers[0],
+        // encoders[0], new double[]{0.5794/2, 0.5794/2}, new double[]{0.05, 0, 0, 0}, new double[]{0.62, 0.0, 0.0});
     }
 
     public void control(double x, double y, double rotate) {
-        swerve.controlWithPercent(x, y, rotate);
+        // swerve.controlWithPercent(x, y, rotate);
+        // mod.set(1, 0, 0);
+        saved.set(1);
+        SmartDashboard.putNumber("motor vel", saved.getVelocity());
     }
 }
 

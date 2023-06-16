@@ -10,8 +10,8 @@ public class Pigeon2IMU implements Gyro<Pigeon2> {
         this.gyro = gyro;
     }
 
-    public Pigeon2IMU(int port) {
-        this.gyro = new Pigeon2(port);
+    public Pigeon2IMU(int port, String bus) {
+        this.gyro = new Pigeon2(port, bus);
     }
 
     @Override

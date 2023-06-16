@@ -1,5 +1,6 @@
 package frc.io.github.anishthewizard.swervey;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.io.github.anishthewizard.control.PIDController;
 import frc.io.github.anishthewizard.electronics.motors.LazyMotorController;
 import frc.io.github.anishthewizard.electronics.encoders.ThreadedEncoder;
@@ -49,6 +50,11 @@ public class SwerveModule {
         velocity *= velocityMultiplier;
 
         double steerSpeed = steerController.calculate(error);
+
+        SmartDashboard.putNumber("velocity", velocity);
+        SmartDashboard.putNumber("targetAngle", adjustedTargetAngle);
+        SmartDashboard.putNumber("steercoder", steercoder.getContinuousPosition());
+        SmartDashboard.putNumber("steer", steerSpeed);
 
         drive.setVelocityInMeters(velocity);
         steer.set(steerSpeed);

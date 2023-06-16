@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class LazyTalonFX implements LazyMotorController<TalonFX> {
 
     private TalonFX motor;
@@ -14,10 +16,12 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
 
     public LazyTalonFX(TalonFX motor, double ticksPerMeter) {
         this.motor = motor;
+        this.ticksPerMeter = ticksPerMeter;
     }
 
     public LazyTalonFX(int port, double ticksPerMeter) {
         this.motor = new TalonFX(port);
+        this.ticksPerMeter = ticksPerMeter;
     }
 
     public void applyConfiguration(TalonFXConfiguration config) {
@@ -39,6 +43,8 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
     @Override
     public void setVelocityInMeters(double speed) {
         speed *= ticksPerMeter;
+        speed /= 10;
+        SmartDashboard.putNumber("speedisspeed", speed);
         motor.set(ControlMode.Velocity, speed);
     }
 
@@ -49,6 +55,6 @@ public class LazyTalonFX implements LazyMotorController<TalonFX> {
 
     @Override
     public double getVelocity() {
-        return motor.getSelectedSensorVelocity()/ticksPerMeter;
+        return (motor.getSelectedSensorVelocity() * 10)/(ticksPerMeter);
     }
 }

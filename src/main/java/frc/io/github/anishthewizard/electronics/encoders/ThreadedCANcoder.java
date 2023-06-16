@@ -19,8 +19,8 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
     private double lastSensorPose;
 
 
-    public ThreadedCANcoder(int port, double threshold, double offset, int delayms) {
-        encoder = new CANCoder(port);
+    public ThreadedCANcoder(int port, double threshold, double offset, int delayms, String bus) {
+        encoder = new CANCoder(port, bus);
         this.overflowThreshold = threshold;
         this.offset = offset;
 
@@ -51,7 +51,7 @@ public class ThreadedCANcoder implements ThreadedEncoder<CANCoder> {
 
     @Override
     public synchronized double getContinuousPosition() {
-        return Math.toRadians(overflows * 360 * getOffsetPosition());
+        return Math.toRadians(overflows * 360 + getOffsetPosition());
     }
 
 

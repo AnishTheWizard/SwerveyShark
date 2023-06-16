@@ -12,7 +12,7 @@ public class Swerve {
     private final SwerveModule[] modules;
 
 
-    private Pigeon2IMU gyro;
+    private Gyro<?> gyro;
 
     private final double[] rotationAngles;
     private double maxModuleSpeed;
@@ -52,6 +52,8 @@ public class Swerve {
         rotationalPIDController = new PIDController(rotationalPIDGains);
 
         this.radius = radius;
+
+        this.gyro = gyro;
 
         for(int i = 0; i < numberOfModules; i++) {
             modules[i] = new SwerveModule(
